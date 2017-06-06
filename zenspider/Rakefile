@@ -1,0 +1,50 @@
+task :default => :run
+
+task :run => [:clean, :link, :test]
+
+task :shell do
+  system docker_cmd
+end
+
+task :test do
+  run %(#{docker_cmd} /bin/sh -c 'for F in /workspace/*.tst; do echo $F; ./tools/HardwareSimulator.sh $F; done')
+end
+
+task :link do
+  ln_s Dir["../projects/01/*.{cmp,tst}"], "01"
+end
+
+task :copy do
+  fs = Dir["../projects/01/*.hdl"]
+  fs.reject! { |f| bf = File.basename f; File.exist? "01/#{bf}" }
+  cp fs, "01" unless fs.empty?
+end
+
+task :clean do
+  files =
+    Dir["**/*~", "**/*.out"] +
+    Dir["**/*"].select { |f| File.symlink? f }
+  rm_f files unless files.empty?
+end
+
+def run cmd
+  system cmd
+end
+
+def docker_cmd
+  base_dir = File.expand_path "#{Dir.pwd}/.."
+  user_dir = File.expand_path Dir.pwd
+
+  cmd = [
+         "docker",
+         "run",
+         "-v", "#{user_dir}/01:/workspace",
+         "-v", "#{base_dir}/tools:/tools",
+         "-v", "#{base_dir}/projects:/projects",
+         "--rm",
+         "-it",
+         "searbsg/nand2tetris2017",
+        ].flatten.compact
+
+  cmd.join " "
+end

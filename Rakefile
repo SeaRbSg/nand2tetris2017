@@ -38,6 +38,11 @@ def run cmd
   sh "./tools/#{cmd}.sh #{f1} #{f2}"
 end
 
+desc "Build a docker image for this project"
+task :image do
+  system "docker build -t searbsg/nand2tetris2017 ."
+end
+
 desc "Run the hardware simulator; Opt: use F=<username/.../f.tst> to run a test"
 task :hdl do
   run "HardwareSimulator"

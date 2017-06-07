@@ -7,7 +7,7 @@ task :shell do
 end
 
 task :test do
-  run %(#{docker_cmd} /bin/sh -c 'for F in /workspace/*.tst; do echo $F; ./tools/HardwareSimulator.sh $F; done')
+  run %(#{docker_cmd} /bin/bash -c 'for F in /workspace/*.tst; do printf "%10s: " $(basename $F .tst); ./tools/HardwareSimulator.sh $F; done')
 end
 
 task :link do
@@ -25,6 +25,16 @@ task :clean do
     Dir["**/*~", "**/*.out"] +
     Dir["**/*"].select { |f| File.symlink? f }
   rm_f files unless files.empty?
+end
+
+task :docker do
+  system "open -a Docker"
+  print "waiting for docker"
+  until system "docker info &> /dev/null" do
+    print "."
+    sleep 1
+  end
+  puts "done"
 end
 
 def run cmd

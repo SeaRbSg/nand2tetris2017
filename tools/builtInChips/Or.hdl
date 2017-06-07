@@ -2,7 +2,7 @@
 // and the book "The Elements of Computing Systems"
 // by Nisan and Schocken, MIT Press.
 // File name: tools/builtIn/Or.hdl
-
+
 /**
  * Or gate: out = 1 if {a == 1 or b == 1}, 0 otherwise  
  */

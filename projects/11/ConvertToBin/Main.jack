@@ -10,28 +10,26 @@
  * Before the conversion, RAM[8001]..RAM[8016] are initialized to -1.
  *
  * The program should be tested as follows:
- * 1) Load the program into the supplied VM Emulator
+ * 1) Load the program into the supplied VM emulator
  * 2) Put some value in RAM[8000]
  * 3) Switch to "no animation"
  * 4) Run the program (give it enough time to run)
  * 5) Stop the program
  * 6) Check that RAM[8001]..RAM[8016] contains the correct binary result, and
- *    that none of these memory locations contain -1.
+ *    that none of these memory locations contains -1.
  */
 class Main {
 
     /**
-     * Initializes RAM[8001]..RAM[8016] to -1, and converts the value in
-     * RAM[8000] to binary.
+     * Initializes RAM[8001]..RAM[8016] to -1,
+     * and converts the value in RAM[8000] to binary.
      */
     function void main() {
-	var int result, value;
-
+	    var int value;
         do Main.fillMemory(8001, 16, -1); // sets RAM[8001]..RAM[8016] to -1
         let value = Memory.peek(8000);    // reads a value from RAM[8000]
-	do Main.convert(value);           // perform the conversion
-
-    	return;
+        do Main.convert(value);           // performs the conversion
+        return;
     }
 
     /** Converts the given decimal value to binary, and puts
@@ -41,11 +39,9 @@ class Main {
     	var boolean loop;
 
     	let loop = true;
-
     	while (loop) {
     	    let position = position + 1;
     	    let mask = Main.nextMask(mask);
-            do Memory.poke(9000 + position, mask);
 
     	    if (~(position > 16)) {
 
@@ -60,7 +56,6 @@ class Main {
     	        let loop = false;
     	    }
     	}
-
     	return;
     }
 
@@ -82,7 +77,6 @@ class Main {
             let length = length - 1;
             let startAddress = startAddress + 1;
         }
-
         return;
     }
 }

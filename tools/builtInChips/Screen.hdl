@@ -9,14 +9,14 @@
  *    1. out(t)=Screen[address(t)](t)
  *    2. If load(t-1) then Screen[address(t-1)](t)=in(t-1)
  *
- * The built-in chip implementation has the side effect of continuously 
- * refreshing a visual 256 by 512 black-and-white screen, simulated 
- * by the simulator. Each row in the visual screen is represented 
- * by 32 consecutive 16-bit words, starting at the top left corner 
- * of the visual screen. Thus the pixel at row r from the top and 
- * column c from the left (0<=r<=255, 0<=c<=511) reflects the c%16 
- * bit (counting from LSB to MSB) of the word found in 
- * Screen[r*32+c/16]. 
+ * The built-in chip implementation has the side effect of continuously
+ * refreshing a visual 256 by 512 black-and-white screen, simulated
+ * by the simulator. Each row in the visual screen is represented
+ * by 32 consecutive 16-bit words, starting at the top left corner
+ * of the visual screen. Thus the pixel at row r from the top and
+ * column c from the left (0<=r<=255, 0<=c<=511) reflects the c%16
+ * bit (counting from LSB to MSB) of the word found in
+ * Screen[r*32+c/16].
  */
 
 CHIP Screen {
@@ -32,4 +32,3 @@ CHIP Screen {
 
 
 
- 

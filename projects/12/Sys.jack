@@ -4,7 +4,7 @@
 // File name: projects/12/Sys.jack
 
 /**
- * A library of basic system services.
+ * A library that supports various program execution services.
  */
 class Sys {
 
@@ -12,15 +12,16 @@ class Sys {
     function void init() {
     }
 
-    /** Halts execution. */
+    /** Halts the program execution. */
     function void halt() {
     }
 
-    /** Waits approximately duration milliseconds and then returns. */
+    /** Waits approximately duration milliseconds and returns.  */
     function void wait(int duration) {
     }
 
-    /** Prints the given error code in the form "ERR<errorCode>", and halts. */
+    /** Displays the given error code in the form "ERR<errorCode>",
+     *  and halts the program's execution. */
     function void error(int errorCode) {
     }
 }

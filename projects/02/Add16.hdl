@@ -3,9 +3,9 @@
 // by Nisan and Schocken, MIT Press.
 // File name: projects/02/Adder16.hdl
 
-/*
+/**
  * Adds two 16-bit values.
- * The most-significant carry bit is ignored.
+ * The most significant carry bit is ignored.
  */
 
 CHIP Add16 {

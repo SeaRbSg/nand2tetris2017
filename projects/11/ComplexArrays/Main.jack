@@ -4,8 +4,8 @@
 // File name: projects/11/ComplexArrays/Main.jack
 
 /**
- * Performs several complex Array tests.
- * For each test, the required result is printed along with the
+ * Performs several complex array processing tests.
+ * For each test, the expected result is printed, along with the
  * actual result. In each test, the two results should be equal.
  */
 class Main {
@@ -21,17 +21,17 @@ class Main {
         let a[4] = 8;
         let a[5] = 4;
         let b[a[3]] = a[3] + 3;  // b[2] = 5
-        let a[b[a[3]]] = a[a[5]] * b[7 - a[3] - Main.double(2) + 1];  // a[5] = 8 * 5 = 40
+        let a[b[a[3]]] = a[a[5]] * b[((7 - a[3]) - Main.double(2)) + 1];  // a[5] = 8 * 5 = 40
         let c[0] = null;
         let c = c[0];
 
-        do Output.printString("Test 1 - Required result: 5, Actual result: ");
+        do Output.printString("Test 1: expected result: 5; actual result: ");
         do Output.printInt(b[2]);
         do Output.println();
-        do Output.printString("Test 2 - Required result: 40, Actual result: ");
+        do Output.printString("Test 2: expected result: 40; actual result: ");
         do Output.printInt(a[5]);
         do Output.println();
-        do Output.printString("Test 3 - Required result: 0, Actual result: ");
+        do Output.printString("Test 3: expected result: 0; actual result: ");
         do Output.printInt(c);
         do Output.println();
 
@@ -47,13 +47,12 @@ class Main {
             let b[1] = b[1] + c[1];  // b[1] = 33 + 77 = 110;
         }
 
-        do Output.printString("Test 4 - Required result: 77, Actual result: ");
+        do Output.printString("Test 4: expected result: 77; actual result: ");
         do Output.printInt(c[1]);
         do Output.println();
-        do Output.printString("Test 5 - Required result: 110, Actual result: ");
+        do Output.printString("Test 5: expected result: 110; actual result: ");
         do Output.printInt(b[1]);
         do Output.println();
-
         return;
     }
 
@@ -66,7 +65,6 @@ class Main {
             let size = size - 1;
             let a[size] = Array.new(3);
         }
-
         return;
     }
 }

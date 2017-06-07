@@ -4,7 +4,8 @@
 // File name: projects/01/Xor.hdl
 
 /**
- *  Exclusive-or gate: out = !(a == b).
+ * Exclusive-or gate:
+ * out = not (a == b)
  */
 
 CHIP Xor {

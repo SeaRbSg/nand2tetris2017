@@ -4,7 +4,7 @@
 // File name: tools/builtIn/DFF.hdl
 
 /**
- * Data Flip-flop: out(t) = in(t-1) 
+ * Data Flip-flop: out(t) = in(t-1)
  * where t is the current time unit, or clock cycle.
  */
 

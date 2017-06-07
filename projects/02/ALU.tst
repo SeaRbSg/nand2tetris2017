@@ -63,7 +63,7 @@ set no 0,
 eval,
 output;
 
-// Compute ~x
+// Compute !x
 set zx 0,
 set nx 0,
 set zy 1,
@@ -73,7 +73,7 @@ set no 1,
 eval,
 output;
 
-// Compute ~y
+// Compute !y
 set zx 1,
 set nx 1,
 set zy 0,
@@ -246,7 +246,7 @@ set no 0,
 eval,
 output;
 
-// Compute ~x
+// Compute !x
 set zx 0,
 set nx 0,
 set zy 1,
@@ -256,7 +256,7 @@ set no 1,
 eval,
 output;
 
-// Compute ~y
+// Compute !y
 set zx 1,
 set nx 1,
 set zy 0,

@@ -4,101 +4,90 @@
 // File name: projects/11/Pong/Ball.jack
 
 /**
- * A graphic ball. Has a screen location and distance of last destination.
- * Has methods for drawing, erasing and moving on the screen.
- * The ball's dimensions are 6X6 pixels.
+ * A graphical ball. Characterized by a screen location and distance of
+ * last destination. Has methods for drawing, erasing and moving on the screen.
+ * The ball is displayed as a filled, 6-by-6 pixles rectangle.
  */
 class Ball {
 
-    // The ball's screen location (in pixels)
-    field int x, y;
+    field int x, y;               // the ball's screen location (in pixels)
+    field int lengthx, lengthy;   // distance of last destination (in pixels)
 
-    // Distance of last destination
-    field int lengthx, lengthy;
+    field int d, straightD, diagonalD;            // used for straight line movement computation
+    field boolean invert, positivex, positivey;   // (same)
 
-    // Used for straight line movement computation
-    field int d, straightD, diagonalD;
-    field boolean invert, positivex, positivey;
+    field int leftWall, rightWall, topWall, bottomWall;  // wall locations
 
-    // wall locations
-    field int leftWall, rightWall, topWall, bottomWall;
+    field int wall;   // last wall that the ball was bounced off of
 
-    // last wall that the ball was bounced from
-    field int wall;
-
-    /** Constructs a new Ball with a given initial location
-     *  and the locations of the walls. */
-    constructor Ball new(int Ax, int Ay, int AleftWall, int ArightWall, int AtopWall, int AbottomWall) {
-	let x = Ax;
-	let y = Ay;
-	let leftWall = AleftWall;
-	let rightWall = ArightWall - 6; // -6 for ball size
-	let topWall = AtopWall;
-	let bottomWall = AbottomWall - 6; // -6 for ball size
-	let wall = 0;
-
+    /** Constructs a new ball with the given initial location and wall locations. */
+    constructor Ball new(int Ax, int Ay,
+                         int AleftWall, int ArightWall, int AtopWall, int AbottomWall) {
+	    let x = Ax;
+	    let y = Ay;
+	    let leftWall = AleftWall;
+	    let rightWall = ArightWall - 6;    // -6 for ball size
+	    let topWall = AtopWall;
+	    let bottomWall = AbottomWall - 6;  // -6 for ball size
+	    let wall = 0;
         do show();
-
         return this;
     }
 
-    /** Deallocates the object's memory. */
+    /** Deallocates the Ball's memory. */
     method void dispose() {
         do Memory.deAlloc(this);
         return;
     }
 
-    /** Draws the ball on the screen. */
+    /** Shows the ball. */
     method void show() {
         do Screen.setColor(true);
-	do draw();
+        do draw();
         return;
     }
 
-    /** Erases the ball from the screen. */
+    /** Hides the ball. */
     method void hide() {
         do Screen.setColor(false);
-	do draw();
+	    do draw();
         return;
     }
 
     /** Draws the ball. */
     method void draw() {
-	do Screen.drawRectangle(x, y, x + 5, y + 5);
-	return;
+	    do Screen.drawRectangle(x, y, x + 5, y + 5);
+	    return;
     }
 
-    /** Returns the left edge of the ball. */
+    /** Returns the ball's left edge. */
     method int getLeft() {
         return x;
     }
 
-    /** Returns the right edge of the ball. */
+    /** Returns the ball's right edge. */
     method int getRight() {
         return x + 5;
     }
 
-    /** Sets the destination of the ball. */
+    /** Computes and sets the ball's destination. */
     method void setDestination(int destx, int desty) {
         var int dx, dy, temp;
-
-	let lengthx = destx - x;
-	let lengthy = desty - y;
+  	    let lengthx = destx - x;
+	    let lengthy = desty - y;
         let dx = Math.abs(lengthx);
         let dy = Math.abs(lengthy);
         let invert = (dx < dy);
 
-        // scan should be on Y-axis
         if (invert) {
             let temp = dx; // swap dx, dy
             let dx = dy;
             let dy = temp;
-
-   	    let positivex = (y < desty);
+   	        let positivex = (y < desty);
             let positivey = (x < destx);
         }
         else {
-	    let positivex = (x < destx);
+	        let positivex = (x < destx);
             let positivey = (y < desty);
         }
 
@@ -106,132 +95,109 @@ class Ball {
         let straightD = 2 * dy;
         let diagonalD = 2 * (dy - dx);
 
-	return;
+	    return;
     }
 
     /**
      * Moves the ball one unit towards its destination.
-     * Returns 0 if the ball has not reached a wall.
-     * If it did, returns a value according to the wall:
-     * 1-left wall, 2-right wall, 3-top wall, 4-bottom wall.
+     * If the ball has reached a wall, returns 0.
+     * Else, returns a value according to the wall:
+     * 1 (left wall), 2 (right wall), 3 (top wall), 4 (bottom wall).
      */
     method int move() {
 
-	do hide();
+	    do hide();
 
-        if (d < 0) {
-            let d = d + straightD;
-        }
+        if (d < 0) { let d = d + straightD; }
         else {
             let d = d + diagonalD;
 
             if (positivey) {
-         	if (invert) {
-	   	    let x = x + 4;
-    	        }
-                else {
-		    let y = y + 4;
-                }
+                if (invert) { let x = x + 4; }
+                else { let y = y + 4; }
             }
             else {
-         	if (invert) {
-	   	    let x = x - 4;
-    	        }
-                else {
-		    let y = y - 4;
-                }
+                if (invert) { let x = x - 4; }
+                else { let y = y - 4; }
             }
-	}
+	    }
 
         if (positivex) {
-      	    if (invert) {
-	       let y = y + 4;
-    	    }
-            else {
-	        let x = x + 4;
-            }
-	}
-	else {
-            if (invert) {
-	        let y = y - 4;
+            if (invert) { let y = y + 4; }
+            else { let x = x + 4; }
 	    }
-            else {
-		let x = x - 4;
-            }
-	}
+	    else {
+            if (invert) { let y = y - 4; }
+            else { let x = x - 4; }
+	    }
 
-	if (~(x > leftWall)) {
-	    let wall = 1;
-	    let x = leftWall;
-	}
+	    if (~(x > leftWall)) {
+	        let wall = 1;
+	        let x = leftWall;
+	    }
         if (~(x < rightWall)) {
-	    let wall = 2;
-	    let x = rightWall;
-	}
+	        let wall = 2;
+	        let x = rightWall;
+	    }
         if (~(y > topWall)) {
             let wall = 3;
-	    let y = topWall;
+	        let y = topWall;
         }
         if (~(y < bottomWall)) {
             let wall = 4;
-	    let y = bottomWall;
+	        let y = bottomWall;
         }
 
-	do show();
+	    do show();
 
-	return wall;
+	    return wall;
     }
 
     /**
-     * Bounces from the current wall: sets the new destination
+     * Bounces off the current wall: sets the new destination
      * of the ball according to the ball's angle and the given
      * bouncing direction (-1/0/1=left/center/right or up/center/down).
      */
     method void bounce(int bouncingDirection) {
-	var int newx, newy, divLengthx, divLengthy, factor;
+        var int newx, newy, divLengthx, divLengthy, factor;
 
-	// dividing by 10 first since results are too big
+	    // dividing by 10 first since results are too big
         let divLengthx = lengthx / 10;
         let divLengthy = lengthy / 10;
-	if (bouncingDirection = 0) {
-	    let factor = 10;
-	}
-	else {
-	    if ((~(lengthx < 0)) & (bouncingDirection = 1) | (lengthx < 0) & (bouncingDirection = (-1))) {
-	        let factor = 20; // bounce direction is in ball direction
-   	    }
+	    if (bouncingDirection = 0) { let factor = 10; }
 	    else {
-	        let factor = 5; // bounce direction is against ball direction
+	        if (((~(lengthx < 0)) & (bouncingDirection = 1)) | ((lengthx < 0) & (bouncingDirection = (-1)))) {
+                let factor = 20; // bounce direction is in ball direction
+            }
+	        else { let factor = 5; } // bounce direction is against ball direction
 	    }
-	}
 
-	if (wall = 1) {
-	    let newx = 506;
-	    let newy = (divLengthy * (-50)) / divLengthx;
+	    if (wall = 1) {
+	        let newx = 506;
+	        let newy = (divLengthy * (-50)) / divLengthx;
             let newy = y + (newy * factor);
-	}
-	else {
- 	    if (wall = 2) {
-	        let newx = 0;
-	        let newy = (divLengthy * 50) / divLengthx;
+	    }
+        else {
+            if (wall = 2) {
+                let newx = 0;
+                let newy = (divLengthy * 50) / divLengthx;
                 let newy = y + (newy * factor);
-	    }
-	    else {
- 	        if (wall = 3) {
-		    let newy = 250;
-		    let newx = (divLengthx * (-25)) / divLengthy;
-	            let newx = x + (newx * factor);
-		}
-	        else { // assumes wall = 4
-		    let newy = 0;
-		    let newx = (divLengthx * 25) / divLengthy;
-	            let newx = x + (newx * factor);
-		}
-	    }
-	}
+	        }
+	        else {
+                if (wall = 3) {
+		            let newy = 250;
+		            let newx = (divLengthx * (-25)) / divLengthy;
+                    let newx = x + (newx * factor);
+		        }
+                else { // assumes wall = 4
+		            let newy = 0;
+		            let newx = (divLengthx * 25) / divLengthy;
+                    let newx = x + (newx * factor);
+		        }
+            }
+        }
 
-	do setDestination(newx, newy);
-
-	return;
+        do setDestination(newx, newy);
+        return;
     }
 }

@@ -5,13 +5,13 @@
 
 /**
  * Computes the value of 1 + (2 * 3) and prints the result
- *  at the top-left of the screen.
+ * at the top-left of the screen.
  */
 class Main {
 
    function void main() {
-       do Output.printInt(1 + (2 * 3));
-       return;
+      do Output.printInt(1 + (2 * 3));
+      return;
    }
 
 }

@@ -4,7 +4,7 @@
 // File name: tools/builtIn/Not.hdl
 
 /**
- * Not gate: out = not in 
+ * Not gate: out = not in
  */
 
 CHIP Not {

@@ -4,8 +4,9 @@
 // File name: projects/01/And.hdl
 
 /**
- * And gate: out = 1 if {a==1 and b==1}, 0 otherwise
- * And gate: if {a==1 and b==1} then out = 1 else out = 0
+ * And gate:
+ * out = 1 if (a == 1 and b == 1)
+ *       0 otherwise
  */
 
 CHIP And {

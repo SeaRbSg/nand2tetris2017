@@ -8,15 +8,13 @@
  */
 class Main {
 
-    /** Initializes the Pong game and starts it. */
+    /** Initializes a Pong game and starts running it. */
     function void main() {
         var PongGame game;
-
-	do PongGame.newInstance();
+        do PongGame.newInstance();
         let game = PongGame.getInstance();
         do game.run();
-	do game.dispose();
-
+        do game.dispose();
         return;
     }
 }

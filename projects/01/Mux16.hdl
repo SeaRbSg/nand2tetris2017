@@ -4,7 +4,9 @@
 // File name: projects/01/Mux16.hdl
 
 /**
- * 16 bit multiplexor. If sel==1 then out=b else out=a.
+ * 16-bit multiplexor:
+ * for i = 0..15 out[i] = a[i] if sel == 0
+ *                        b[i] if sel == 1
  */
 
 CHIP Mux16 {
@@ -14,4 +16,3 @@ CHIP Mux16 {
     PARTS:
     // Put your code here:
 }
-

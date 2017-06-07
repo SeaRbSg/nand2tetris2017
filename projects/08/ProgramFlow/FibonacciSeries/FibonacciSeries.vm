@@ -12,9 +12,9 @@ push argument 1
 pop pointer 1           // that = argument[1]
 
 push constant 0
-pop that 0              // first element = 0
+pop that 0              // first element in the series = 0
 push constant 1
-pop that 1              // second element = 1
+pop that 1              // second element in the series = 1
 
 push argument 0
 push constant 2

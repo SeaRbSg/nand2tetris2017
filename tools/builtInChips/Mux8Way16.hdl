@@ -4,14 +4,14 @@
 // File name: tools/builtIn/Mux8Way16.hdl
 
 /**
- * 8-way 16-bit multiplexor.  
+ * 8-way 16-bit multiplexor.
  * out = a if sel == 000
  *       b if sel == 001
  *       etc.
  *       h if sel == 111
  */
 
- 
+
 CHIP Mux8Way16 {
 
     IN  a[16], b[16], c[16], d[16],

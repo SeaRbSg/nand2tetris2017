@@ -4,7 +4,7 @@
 // File name: tools/builtIn/FullAdder.hdl
 
 /**
- * Full adder. Computes sum, the least significant bit of 
+ * Full adder. Computes sum, the least significant bit of
  * a + b + c, and carry, the most significant bit of a + b + c.
  */
 

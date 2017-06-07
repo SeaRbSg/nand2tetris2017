@@ -4,7 +4,10 @@
 // File name: projects/12/Screen.jack
 
 /**
- * Graphic screen library.
+ * A library of functions for displaying graphics on the screen.
+ * The Hack physical screen consists of 512 rows (indexed 0..511, top to bottom)
+ * of 256 pixels each (indexed 0..255, left to right). The top left pixel on
+ * the screen is indexed (0,0).
  */
 class Screen {
 
@@ -12,29 +15,29 @@ class Screen {
     function void init() {
     }
 
-    /** Erases the whole screen. */
+    /** Erases the entire screen. */
     function void clearScreen() {
     }
 
-    /** Sets the color to be used in further draw commands
-     *  where white = false, black = true. */
+    /** Sets the current color, to be used for all subsequent drawXXX commands.
+     *  Black is represented by true, white by false. */
     function void setColor(boolean b) {
     }
 
-    /** Draws the (x, y) pixel. */
+    /** Draws the (x,y) pixel, using the current color. */
     function void drawPixel(int x, int y) {
     }
 
-    /** Draws a line from (x1, y1) to (x2, y2). */
+    /** Draws a line from pixel (x1,y1) to pixel (x2,y2), using the current color. */
     function void drawLine(int x1, int y1, int x2, int y2) {
     }
 
-    /** Draws a filled rectangle where the top left corner
-     *  is (x1, y1) and the bottom right corner is (x2, y2). */
+    /** Draws a filled rectangle whose top left corner is (x1, y1)
+     * and bottom right corner is (x2,y2), using the current color. */
     function void drawRectangle(int x1, int y1, int x2, int y2) {
     }
 
-    /** Draws a filled circle of radius r around (cx, cy). */
-    function void drawCircle(int cx, int cy, int r) {
+    /** Draws a filled circle of radius r<=181 around (x,y), using the current color. */
+    function void drawCircle(int x, int y, int r) {
     }
 }

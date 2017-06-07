@@ -4,7 +4,8 @@
 // File name: projects/01/Not16.hdl
 
 /**
- * 16-bit Not gate: for i=0..15: out[i] = not in[i]
+ * 16-bit Not:
+ * for i=0..15: out[i] = not in[i]
  */
 
 CHIP Not16 {

@@ -4,15 +4,15 @@
 // File name: projects/05/Memory.hdl
 
 /**
- * The complete address space of the computer's memory,
- * including RAM and memory mapped I/O.
+ * The complete address space of the Hack computer's memory,
+ * including RAM and memory-mapped I/O.
  * The chip facilitates read and write operations, as follows:
  *     Read:  out(t) = Memory[address(t)](t)
- *     Write: If load(t-1) then Memory[address(t-1)](t) = in(t-1)
+ *     Write: if load(t-1) then Memory[address(t-1)](t) = in(t-1)
  * In words: the chip always outputs the value stored at the memory
- * location specified by address. If load=1, the in value is loaded
+ * location specified by address. If load==1, the in value is loaded
  * into the memory location specified by address. This value becomes
- * available through the out output in the next time step.
+ * available through the out output from the next time step onward.
  * Address space rules:
  * Only the upper 16K+8K+1 words of the Memory chip are used.
  * Access to address>0x6000 is invalid. Access to any address in

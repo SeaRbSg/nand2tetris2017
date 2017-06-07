@@ -1,0 +1,182 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Mux8Way16.hdl
+
+/**
+ * 8-way 16-bit multiplexor:
+ * out = a if sel == 000
+ *       b if sel == 001
+ *       etc.
+ *       h if sel == 111
+ */
+
+CHIP Mux8Way16 {
+    IN a[16], b[16], c[16], d[16],
+       e[16], f[16], g[16], h[16],
+       sel[3];
+    OUT out[16];
+
+    PARTS:
+    DMux8Way(in=true,
+             sel=sel,
+             a=channelA,
+             b=channelB,
+             c=channelC,
+             d=channelD,
+             e=channelE,
+             f=channelF,
+             g=channelG,
+             h=channelH);
+    And16(a=a,
+          b[0]=channelA,
+          b[1]=channelA,
+          b[2]=channelA,
+          b[3]=channelA,
+          b[4]=channelA,
+          b[5]=channelA,
+          b[6]=channelA,
+          b[7]=channelA,
+          b[8]=channelA,
+          b[9]=channelA,
+          b[10]=channelA,
+          b[11]=channelA,
+          b[12]=channelA,
+          b[13]=channelA,
+          b[14]=channelA,
+          b[15]=channelA,
+          out=outA);
+    And16(a=b,
+          b[0]=channelB,
+          b[1]=channelB,
+          b[2]=channelB,
+          b[3]=channelB,
+          b[4]=channelB,
+          b[5]=channelB,
+          b[6]=channelB,
+          b[7]=channelB,
+          b[8]=channelB,
+          b[9]=channelB,
+          b[10]=channelB,
+          b[11]=channelB,
+          b[12]=channelB,
+          b[13]=channelB,
+          b[14]=channelB,
+          b[15]=channelB,
+          out=outB);
+    And16(a=c,
+          b[0]=channelC,
+          b[1]=channelC,
+          b[2]=channelC,
+          b[3]=channelC,
+          b[4]=channelC,
+          b[5]=channelC,
+          b[6]=channelC,
+          b[7]=channelC,
+          b[8]=channelC,
+          b[9]=channelC,
+          b[10]=channelC,
+          b[11]=channelC,
+          b[12]=channelC,
+          b[13]=channelC,
+          b[14]=channelC,
+          b[15]=channelC,
+          out=outC);
+    And16(a=d,
+          b[0]=channelD,
+          b[1]=channelD,
+          b[2]=channelD,
+          b[3]=channelD,
+          b[4]=channelD,
+          b[5]=channelD,
+          b[6]=channelD,
+          b[7]=channelD,
+          b[8]=channelD,
+          b[9]=channelD,
+          b[10]=channelD,
+          b[11]=channelD,
+          b[12]=channelD,
+          b[13]=channelD,
+          b[14]=channelD,
+          b[15]=channelD,
+          out=outD);
+    And16(a=e,
+          b[0]=channelE,
+          b[1]=channelE,
+          b[2]=channelE,
+          b[3]=channelE,
+          b[4]=channelE,
+          b[5]=channelE,
+          b[6]=channelE,
+          b[7]=channelE,
+          b[8]=channelE,
+          b[9]=channelE,
+          b[10]=channelE,
+          b[11]=channelE,
+          b[12]=channelE,
+          b[13]=channelE,
+          b[14]=channelE,
+          b[15]=channelE,
+          out=outE);
+    And16(a=f,
+          b[0]=channelF,
+          b[1]=channelF,
+          b[2]=channelF,
+          b[3]=channelF,
+          b[4]=channelF,
+          b[5]=channelF,
+          b[6]=channelF,
+          b[7]=channelF,
+          b[8]=channelF,
+          b[9]=channelF,
+          b[10]=channelF,
+          b[11]=channelF,
+          b[12]=channelF,
+          b[13]=channelF,
+          b[14]=channelF,
+          b[15]=channelF,
+          out=outF);
+    And16(a=g,
+          b[0]=channelG,
+          b[1]=channelG,
+          b[2]=channelG,
+          b[3]=channelG,
+          b[4]=channelG,
+          b[5]=channelG,
+          b[6]=channelG,
+          b[7]=channelG,
+          b[8]=channelG,
+          b[9]=channelG,
+          b[10]=channelG,
+          b[11]=channelG,
+          b[12]=channelG,
+          b[13]=channelG,
+          b[14]=channelG,
+          b[15]=channelG,
+          out=outG);
+    And16(a=h,
+          b[0]=channelH,
+          b[1]=channelH,
+          b[2]=channelH,
+          b[3]=channelH,
+          b[4]=channelH,
+          b[5]=channelH,
+          b[6]=channelH,
+          b[7]=channelH,
+          b[8]=channelH,
+          b[9]=channelH,
+          b[10]=channelH,
+          b[11]=channelH,
+          b[12]=channelH,
+          b[13]=channelH,
+          b[14]=channelH,
+          b[15]=channelH,
+          out=outH);
+    Or16(a=outA,b=outB,out=outAB);
+    Or16(a=outAB,b=outC,out=outAC);
+    Or16(a=outAC,b=outD,out=outAD);
+    Or16(a=outAD,b=outE,out=outAE);
+    Or16(a=outAE,b=outF,out=outAF);
+    Or16(a=outAF,b=outG,out=outAG);
+    Or16(a=outAG,b=outH,out=out);
+}

@@ -5,6 +5,7 @@ user ||= "zenspider" if ENV["USER"] == "ryan"
 user = "nanoxd" if ENV["USER"] == "nano"
 user = "thagomizer" if ENV["USER"] == "aja"
 user = "jf647" if ENV["USER"] = "james"
+user = "joeadcock" if ENV["USER"] == "joe"
 
 skip = {
         "05" => %w[Memory.tst],

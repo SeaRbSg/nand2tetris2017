@@ -69,21 +69,7 @@ CHIP ALU {
 
     // ng
     Or16(a=output,
-      b[0]=true,
-      b[1]=true,
-      b[2]=true,
-      b[3]=true,
-      b[4]=true,
-      b[5]=true,
-      b[6]=true,
-      b[7]=true,
-      b[8]=true,
-      b[9]=true,
-      b[10]=true,
-      b[11]=true,
-      b[12]=true,
-      b[13]=true,
-      b[14]=true,
+      b[0..14]=true,
       b[15]=false,
       out=ngmask);
     Comp16(a=one16,b=ngmask,out=ng);

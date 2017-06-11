@@ -1,0 +1,32 @@
+/**
+ * 16-bit constant:
+ * if in=true: returns array of 16 1's
+ * else:       returns array of 16 0's
+ */
+
+CHIP Dup16 {
+
+    IN in;
+
+    OUT out[16];
+
+    PARTS:
+    And16(a[0..15]=true,
+          b[0]=in,
+          b[1]=in,
+          b[2]=in,
+          b[3]=in,
+          b[4]=in,
+          b[5]=in,
+          b[6]=in,
+          b[7]=in,
+          b[8]=in,
+          b[9]=in,
+          b[10]=in,
+          b[11]=in,
+          b[12]=in,
+          b[13]=in,
+          b[14]=in,
+          b[15]=in,
+          out=out);
+}

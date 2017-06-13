@@ -14,7 +14,7 @@ CHIP And {
 
     PARTS:
 
-        Nor(a=a, b=a, out=w1);
-        Nor(a=b, b=b, out=w2);
-        Nor(a=w1, b=w2, out=out);
+    Nor(a=a, b=a, out=w1);
+    Nor(a=b, b=b, out=w2);
+    Nor(a=w1, b=w2, out=out);
 }

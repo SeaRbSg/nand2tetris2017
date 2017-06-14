@@ -68,12 +68,27 @@ CHIP ALU {
     And16(a=output,b=one16,out=out);
 
     // ng
-    Or16(a=output,
-      b[0..14]=true,
-      b[15]=false,
+    And16(a=output,
+      b[0]=false,
+      b[1]=false,
+      b[2]=false,
+      b[3]=false,
+      b[4]=false,
+      b[5]=false,
+      b[6]=false,
+      b[7]=false,
+      b[8]=false,
+      b[9]=false,
+      b[10]=false,
+      b[11]=false,
+      b[12]=false,
+      b[13]=false,
+      b[14]=false,
+      b[15]=true,
       out=ngmask);
-    Comp16(a=one16,b=ngmask,out=ng);
+    Or16Way(in=ngmask,out=ng);
 
     // zr
-    Comp16(a=output,b=zero16,out=zr);
+    Or16Way(in=output,out=notzr);
+    Not(in=notzr,out=zr);
 }

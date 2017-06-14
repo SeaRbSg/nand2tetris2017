@@ -1,17 +1,25 @@
 task :default => :run
 
-task :run => [:clean, :link, :test]
+task :run => :test
 
 task :shell do
   system docker_cmd
 end
 
 task :test do
-  run %(#{docker_cmd} /bin/bash -c 'for F in /workspace/*.tst; do printf "%10s: " $(basename $F .tst); ./tools/HardwareSimulator.sh $F; done')
+  f = ENV["F"]
+  if f then
+    f = File.basename f, ".tst"
+    run %(#{docker_cmd} /bin/bash -c 'printf "%10s: " #{f}; ./tools/HardwareSimulator.sh /workspace/#{f}.tst')
+  else
+    run %(#{docker_cmd} /bin/bash -c 'for F in /workspace/*.tst; do printf "%10s: " $(basename $F .tst); ./tools/HardwareSimulator.sh $F; done')
+  end
 end
 
 task :link do
-  ln_s Dir["../projects/01/*.{cmp,tst}"], "01"
+  Dir.chdir "01" do
+    ln_s Dir["../../projects/01/*.{cmp,tst}"], "."
+  end
 end
 
 task :copy do

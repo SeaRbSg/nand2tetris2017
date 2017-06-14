@@ -1,0 +1,38 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/DMux.hdl
+
+/**
+ * Demultiplexor:
+ * {a, b} = {in, 0} if sel == 0
+ *          {0, in} if sel == 1
+ */
+
+CHIP DMux {
+    IN in, sel;
+    OUT a, b;
+
+    PARTS:
+
+    // Not(in=sel, out=w1);
+    // And(a=w1, b=in, out=a);
+    // And(a=sel, b=in, out=b);
+
+    // Translates to:
+
+    // Nor(a=sel, a=sel, out=w1);
+    // Nor(a=w1,  b=w1,  out=i2); Nor(a=in, b=in, out=i3); Nor(a=i2, b=i3, out=a);
+    // Nor(a=sel, b=sel, out=i4); Nor(a=in, b=in, out=i5); Nor(a=i4, b=i5, out=b);
+
+    // Optimizes to:
+
+    // /* Nor(a=sel, a=sel, out=w1); */
+    // /* Nor(a=w1,  b=w1,  out=i2); */ Nor(a=in, b=in, out=i3); Nor(a=sel, b=i3, out=a);
+    // Nor(a=sel, b=sel, out=i4); /* Nor(a=in, b=in, out=i5); */ Nor(a=i4, b=i3, out=b);
+
+    // or:
+
+    Nor(a=in,  b=in,  out=i3); Nor(a=sel, b=i3, out=a);
+    Nor(a=sel, b=sel, out=i4); Nor(a=i4,  b=i3, out=b);
+}

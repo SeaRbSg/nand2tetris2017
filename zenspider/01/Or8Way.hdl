@@ -1,0 +1,40 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Or8Way.hdl
+
+/**
+ * 8-way Or:
+ * out = (in[0] or in[1] or ... or in[7])
+ */
+
+CHIP Or8Way {
+    IN in[8];
+    OUT out;
+
+    PARTS:
+
+    // Or(a=in[0], b=in[1], out=w1);
+    // Or(a=in[2], b=in[3], out=w2);
+    // Or(a=in[4], b=in[5], out=w3);
+    // Or(a=in[6], b=in[7], out=w4);
+    // 
+    // Or(a=w1, b=w2, out=w5);
+    // Or(a=w3, b=w4, out=w6);
+    // 
+    // Or(a=w5, b=w6, out=out);
+
+    // Translates to:
+
+    Nor(a=in[0], b=in[1], out=i1); Nor(a=i1, b=i1, out=w1);
+    Nor(a=in[2], b=in[3], out=i2); Nor(a=i2, b=i2, out=w2);
+    Nor(a=in[4], b=in[5], out=i3); Nor(a=i3, b=i3, out=w3);
+    Nor(a=in[6], b=in[7], out=i4); Nor(a=i4, b=i4, out=w4);
+    
+    Nor(a=w1, b=w2, out=i5); Nor(a=i5, b=i5, out=w5);
+    Nor(a=w3, b=w4, out=i6); Nor(a=i6, b=i6, out=w6);
+    
+    Nor(a=w5, b=w6, out=i7); Nor(a=i7, b=i7, out=out);
+
+    // I don't think any further optimations are possible?
+}

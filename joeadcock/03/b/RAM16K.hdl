@@ -1,0 +1,148 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/03/b/RAM16K.hdl
+
+/**
+ * Memory of 16K registers, each 16 bit-wide. Out holds the value
+ * stored at the memory location specified by address. If load==1, then
+ * the in value is loaded into the memory location specified by address
+ * (the loaded value will be emitted to out from the next time step onward).
+ */
+
+CHIP RAM16K {
+    IN in[16], load, address[14];
+    OUT out[16];
+
+    PARTS:
+    DMux8Way(in=load,
+             sel[0]=address[0],
+             sel[1]=address[1],
+             sel[2]=address[2],
+             a=loadbank0,
+             b=loadbank1,
+             c=loadbank2,
+             d=loadbank3,
+             e=loadbank4,
+             f=loadbank5,
+             g=loadbank6,
+             h=loadbank7);
+
+    RAM4K(in=in,
+         load=loadbank0,
+         address[0]=address[3],
+         address[1]=address[4],
+         address[2]=address[5],
+         address[3]=address[6],
+         address[4]=address[7],
+         address[5]=address[8],
+         address[6]=address[9],
+         address[7]=address[10],
+         address[8]=address[11],
+         address[9]=address[12],
+         address[10]=address[13],
+         out=bank0);
+    RAM4K(in=in,
+         load=loadbank1,
+         address[0]=address[3],
+         address[1]=address[4],
+         address[2]=address[5],
+         address[3]=address[6],
+         address[4]=address[7],
+         address[5]=address[8],
+         address[6]=address[9],
+         address[7]=address[10],
+         address[8]=address[11],
+         address[9]=address[12],
+         address[10]=address[13],
+         out=bank1);
+    RAM4K(in=in,
+         load=loadbank2,
+         address[0]=address[3],
+         address[1]=address[4],
+         address[2]=address[5],
+         address[3]=address[6],
+         address[4]=address[7],
+         address[5]=address[8],
+         address[6]=address[9],
+         address[7]=address[10],
+         address[8]=address[11],
+         address[9]=address[12],
+         address[10]=address[13],
+         out=bank2);
+    RAM4K(in=in,
+         load=loadbank3,
+         address[0]=address[3],
+         address[1]=address[4],
+         address[2]=address[5],
+         address[3]=address[6],
+         address[4]=address[7],
+         address[5]=address[8],
+         address[6]=address[9],
+         address[7]=address[10],
+         address[8]=address[11],
+         address[9]=address[12],
+         address[10]=address[13],
+         out=bank3);
+    RAM4K(in=in,
+         load=loadbank4,
+         address[0]=address[3],
+         address[1]=address[4],
+         address[2]=address[5],
+         address[3]=address[6],
+         address[4]=address[7],
+         address[5]=address[8],
+         address[6]=address[9],
+         address[7]=address[10],
+         address[8]=address[11],
+         address[9]=address[12],
+         address[10]=address[13],
+         out=bank4);
+    RAM4K(in=in,
+         load=loadbank5,
+         address[0]=address[3],
+         address[1]=address[4],
+         address[2]=address[5],
+         address[3]=address[6],
+         address[4]=address[7],
+         address[5]=address[8],
+         address[6]=address[9],
+         address[7]=address[10],
+         address[8]=address[11],
+         address[9]=address[12],
+         address[10]=address[13],
+         out=bank5);
+    RAM4K(in=in,
+         load=loadbank6,
+         address[0]=address[3],
+         address[1]=address[4],
+         address[2]=address[5],
+         address[3]=address[6],
+         address[4]=address[7],
+         address[5]=address[8],
+         address[6]=address[9],
+         address[7]=address[10],
+         address[8]=address[11],
+         address[9]=address[12],
+         address[10]=address[13],
+         out=bank6);
+    RAM4K(in=in,
+         load=loadbank7,
+         address[0]=address[3],
+         address[1]=address[4],
+         address[2]=address[5],out=bank7);
+
+    Mux8Way16(a=bank0,
+              b=bank1,
+              c=bank2,
+              d=bank3,
+              e=bank4,
+              f=bank5,
+              g=bank6,
+              h=bank7,
+              sel[0]=address[0],
+              sel[1]=address[1],
+              sel[2]=address[2],
+              out=out);
+
+}

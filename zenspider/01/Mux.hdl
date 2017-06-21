@@ -41,21 +41,27 @@ CHIP Mux {
     // Nor(a=w2, b=w3, out=i5);
     // Nor(a=i5, b=i5, out=out);
 
-
     // Stage 3: optimize out not(not(x)) -> x, sel in this case
 
-    // And(a=!sel, b=a, out=w2);
-    Nor(a=a, b=a, out=i2);
-    Nor(a=sel, b=i2, out=w2);
+    // // And(a=!sel, b=a, out=w2);
+    // Nor(a=a, b=a, out=i2);
+    // Nor(a=sel, b=i2, out=w2);
+    //
+    // // And(a=sel, b=b, out=w3);
+    // Nor(a=sel, b=sel, out=i3);
+    // Nor(a=b, b=b, out=i4);
+    // Nor(a=i3, b=i4, out=w3);
+    //
+    // // Or(a=w2, b=w3, out=out);
+    // Nor(a=w2, b=w3, out=i5);
+    // Nor(a=i5, b=i5, out=out);
 
-    // And(a=sel, b=b, out=w3);
-    Nor(a=sel, b=sel, out=i3);
-    Nor(a=b, b=b, out=i4);
-    Nor(a=i3, b=i4, out=w3);
+    // Stage 4: I'm notting all inputs and the output, remove
 
-    // Or(a=w2, b=w3, out=out);
-    Nor(a=w2, b=w3, out=i5);
-    Nor(a=i5, b=i5, out=out);
+    Nor(a=a, b=sel, out=w1);
 
-    // I can't figure out how to optimize this further
+    Nor(a=sel, b=sel, out=i1);
+    Nor(a=i1, b=b, out=w2);
+
+    Nor(a=w1, b=w2, out=out);
 }

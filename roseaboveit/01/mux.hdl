@@ -1,0 +1,11 @@
+/** Returns result of input based on a selector bit. Returns first input if selector is 0, else second. */
+
+CHIP Mux {
+  IN in1, in2, s;
+  OUT out;
+  PARTS:
+    Not(in=s, out=ns);
+    And(a=in1, b=ns, out=x1);
+    And(a=in2, b=s, out=x2);
+    Or(a=x1, b=x2, out=out);
+}

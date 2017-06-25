@@ -1,0 +1,12 @@
+/** Xor or Exclusive-Or, Returns true IFF one input is true and the other is false */
+
+CHIP Xor {
+  IN in1, in2;
+  OUT out;
+  PARTS:
+    Not(a=in1, out=nin1);
+    Not(a=in2, out=nin2);
+    Nand(a=in1, b=nin2, out=x1);
+    Nand(a=in2, b=nin1, out=x2);
+    Or(a=x1, b=x2, out=out);
+}

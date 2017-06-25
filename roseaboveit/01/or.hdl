@@ -1,0 +1,11 @@
+/** Returns true IFF at least one of the 2 inputs is true */
+
+CHIP Or {
+  IN in1, in2;
+  OUT out;
+  PARTS:
+    Nand(a=in1, b=in1, out=x1);
+    Nand(a=in2, b=in2, out=x2);
+    Nand(a=x1, b=x2, out=out);
+}
+

@@ -1,0 +1,12 @@
+/** Dmux sets a and b outputs based on selector input.
+  * out1 = in if selector is 0 else out2 = in.
+  * Unselected output pin is 0. */
+
+CHIP Dmux{
+  IN s, in;
+  OUT out1, out2;
+  PARTS:
+    NOT(in=s, out=ns);
+    AND(a=ns, b=in, out=out1);
+    AND(a=s, b=in, out=out2);
+}

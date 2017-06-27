@@ -1,31 +1,52 @@
+CHAPTERS = %w[01 02 03/a 03/b]
+
 task :default => :run
 
 task :run => :test
 
 task :shell do
-  system docker_cmd
+  n = ENV["N"] or CHAPTERS.last
+  system docker_cmd n
 end
 
 task :test do
   f = ENV["F"]
+
   if f then
+    n = File.dirname f
     f = File.basename f, ".tst"
-    run %(#{docker_cmd} /bin/bash -c 'printf "%10s: " #{f}; ./tools/HardwareSimulator.sh /workspace/#{f}.tst')
+    run %(#{docker_cmd n} /bin/bash -c 'printf "%10s: " #{f}; ./tools/HardwareSimulator.sh /workspace/#{f}.tst')
   else
-    run %(#{docker_cmd} /bin/bash -c 'for F in /workspace/*.tst; do printf "%10s: " $(basename $F .tst); ./tools/HardwareSimulator.sh $F; done')
+    n = ENV["N"] or CHAPTERS.last
+    run %(#{docker_cmd n} /bin/bash -c 'for F in `find /workspace -name \\*.tst`; do printf "%10s: " $(basename $F .tst); ./tools/HardwareSimulator.sh $F; done')
   end
 end
 
-task :link do
-  Dir.chdir "01" do
-    ln_s Dir["../../projects/01/*.{cmp,tst}"], "."
-  end
-end
+require "pathname"
+TOP = Pathname.new Dir.pwd
 
-task :copy do
-  fs = Dir["../projects/01/*.hdl"]
-  fs.reject! { |f| bf = File.basename f; File.exist? "01/#{bf}" }
-  cp fs, "01" unless fs.empty?
+CHAPTERS.each do |n|
+  task "link#{n}" do
+    Dir.chdir n do
+      here = Pathname.new Dir.pwd
+      dir = (TOP / "../projects/#{n}").relative_path_from here
+
+      fs = Dir["#{dir}/*.{cmp,tst}"]
+      fs.reject! { |f| bf = File.basename f; File.exist? "#{bf}" }
+      ln_s fs, "." unless fs.empty?
+    end
+  end
+
+  task "copy#{n}" do
+    Dir.chdir n do
+      fs = Dir["#{TOP}/../projects/#{n}/*.hdl"]
+      fs.reject! { |f| bf = File.basename f; File.exist? "#{bf}" }
+      cp fs, "." unless fs.empty?
+    end
+  end
+
+  task :link => "link#{n}"
+  task :copy => "copy#{n}"
 end
 
 task :clean do
@@ -49,14 +70,14 @@ def run cmd
   system cmd
 end
 
-def docker_cmd
+def docker_cmd n
   base_dir = File.expand_path "#{Dir.pwd}/.."
   user_dir = File.expand_path Dir.pwd
 
   cmd = [
          "docker",
          "run",
-         "-v", "#{user_dir}/01:/workspace",
+         "-v", "#{user_dir}/#{n}:/workspace",
          "-v", "#{base_dir}/tools:/tools",
          "-v", "#{base_dir}/projects:/projects",
          "--rm",

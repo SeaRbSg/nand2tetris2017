@@ -1,7 +1,8 @@
 *.dat
 *.out
-*/*/*.tst
-*/*/*.cmp
+**/*.tst
+**/*.cmp
+zenspider/02/Nor.hdl
 */04/*/*.hack
 */06/*/*.hack
 */09/*/*.vm

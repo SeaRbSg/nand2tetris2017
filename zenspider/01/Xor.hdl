@@ -51,13 +51,25 @@ CHIP Xor {
 
     // Step 4: share the not logic in one nor
 
-    Nor(a=a, b=b, out=w1);
+    // This is, on further inspection a not(xnor(a, b)) gate and is
+    // longer than it needs to be:
 
-    Nor(a=a, b=w1, out=w2);       // And(a=a, b=notab, out=w1);
+    // Nor(a=a, b=b, out=w1);
+    //
+    // Nor(a=a, b=w1, out=w2);       // And(a=a, b=notab, out=w1);
+    //
+    // Nor(a=w1, b=b, out=w3);       // And(a=notab, b=b, out=w2);
+    //
+    // Nor(a=w2, b=w3, out=w4);      // Or(a=w1, b=w2, out=out);
+    // Nor(a=w4, b=w4, out=out);
 
-    Nor(a=w1, b=b, out=w3);       // And(a=notab, b=b, out=w2);
+    // this is a "proper" xor: nor(nor(a,b), nor(nor(a,a),nor(b,b)))
 
-    Nor(a=w2, b=w3, out=w4);      // Or(a=w1, b=w2, out=out);
-    Nor(a=w4, b=w4, out=out);
+    Nor(a=a,  b=a,  out=w1);    // depth = 1
+    Nor(a=b,  b=b,  out=w2);
+    Nor(a=a,  b=b,  out=w3);
 
+    Nor(a=w1, b=w2, out=w4);    // depth = 2
+
+    Nor(a=w3, b=w4, out=out);   // depth = 3
 }

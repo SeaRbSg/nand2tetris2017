@@ -1,0 +1,80 @@
+HDL is easier grokked when understood as a markup language. Logic gates will be described in syntax familiar to you as pseudocode. For example:
+
+Chip Name: Or
+Inputs: a,b
+Outputs: out
+Function: If a=b=0 then out=0 else out=1.
+
+HDL doesn't have if/else syntax. This is telling us to use boolean arithmetic to create out=1 if a or b is 1. 
+
+Chip Body
+==
+
+The chip body is self explanatory. Here is the Or gate HDL file.
+
+    CHIP Or {
+    //Declaring a Chip named 'or'. The definition is between the brackets.
+    
+        IN a, b;
+        OUT out;
+        //Header of the chip. It declares the expected wires IN and OUT.
+
+        PARTS:
+        //Here are the logical statements that describe how IN gets to OUT.
+        Not(in=a, out=nota); // Invert a into nota
+        Not(in=b, out=notb); // Invert b into notb
+        Nand(a=nota, b=notb, out=out); // Nand's truth table will now output Or's truth table
+    }
+    
+Statements
+==
+
+Statements will be a single line representing a chip and how it is used. 
+
+        Not(in=a, out=nota);
+        
+If you looked at Not.hdl you would see in the Chip declaration an IN of in and and OUT of out. These names represent physical wires that are coming in and out of the chip. 
+    
+    in=a
+    
+Everything on the left side of '=' is the name of the pin going in. Everything on the rigt is the name of the pin going out.
+
+In addition to pins, we can provide boolean values using 'true' or 'false'.
+
+  Nand(a=in, b=true, out=out);
+  
+If we are only concerned with the input of 'a' we can supplement the input of 'b' with a boolean.
+
+Not declaring a pin is not a problem. The HardwareSimulator will supplement it with false (0). 
+
+ Nand(out=alwaystrue);
+ //The a and b pins are not declared so their values
+ //  default to 0. Nand returns 1 if a and b are both 0. 
+
+We can also declare additional pins. Say we have a statement that declares the out pin but we also need that value for another statement.
+
+  Xor(a=a, b=b, out=sum);
+  Or(a=a, b=sum, out=carry);
+  
+In this chip, 'sum' and 'carry'  are the out pins. If we run this in the Hardware Simulator it will result in an error: "Can't connect gate's output to part:".
+
+Remember, 'sum' is a declared physical wire coming out of the chip. We cannot re-route it. However, we can declare additional outs:
+
+  Xor(a=a, b=b, out=ab, out=sum);
+  Or(a=a, b=ab, out=carry);
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+

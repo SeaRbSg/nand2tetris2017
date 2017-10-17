@@ -9,10 +9,14 @@
  *       0 otherwise
  */
 
+// b=a can also be b=true
+
 CHIP Or {
     IN a, b;
     OUT out;
 
     PARTS:
-    // Put your code here:
+    Nand(a=a, b=a, out=a-out);
+    Nand(a=b, b=b, out=b-out);
+    Nand(a=a-out, b=b-out, out=out);
 }

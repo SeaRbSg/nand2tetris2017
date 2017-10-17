@@ -8,10 +8,22 @@
  * out = not (a == b)
  */
 
+/
+/  __________|\.___
+/  |       |-|/    |
+/ ---|\.___|       |_|\.
+/ ---|/    |       |-|/
+/  |       |-|\.___|
+/  _________-|/
+/
+
 CHIP Xor {
     IN a, b;
     OUT out;
 
     PARTS:
-    // Put your code here:
+    Nand(a=a, b=b, out=first-out);
+    Nand(a=a, b=first-out, out=second-out);
+    Nand(a=first-out, b=b, out=third-out);
+    Nand(a=second-out, b=third-out, out=out);
 }

@@ -21,18 +21,9 @@ CHIP DMux {
 
     // Translates to:
 
-    // Nor(a=sel, a=sel, out=w1);
-    // Nor(a=w1,  b=w1,  out=i2); Nor(a=in, b=in, out=i3); Nor(a=i2, b=i3, out=a);
-    // Nor(a=sel, b=sel, out=i4); Nor(a=in, b=in, out=i5); Nor(a=i4, b=i5, out=b);
-
-    // Optimizes to:
-
-    // /* Nor(a=sel, a=sel, out=w1); */
-    // /* Nor(a=w1,  b=w1,  out=i2); */ Nor(a=in, b=in, out=i3); Nor(a=sel, b=i3, out=a);
-    // Nor(a=sel, b=sel, out=i4); /* Nor(a=in, b=in, out=i5); */ Nor(a=i4, b=i3, out=b);
-
-    // or:
-
-    Nor(a=in,  b=in,  out=i3); Nor(a=sel, b=i3, out=a);
-    Nor(a=sel, b=sel, out=i4); Nor(a=i4,  b=i3, out=b);
+    Nand(a=sel, b=sel, out=w1);
+    Nand(a=w1, b=in, out=w2);
+    Nand(a=w2, b=w2, out=a);
+    Nand(a=sel, b=in, out=w3);
+    Nand(a=w3, b=w3, out=b);
 }

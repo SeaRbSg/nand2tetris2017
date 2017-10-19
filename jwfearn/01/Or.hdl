@@ -13,3 +13,17 @@ CHIP Or {
     Nand(a=b, b=b, out=nb);
     Nand(a=na, b=nb, out=out);
 }
+
+/*
+    SIMPLE                      NAND-ONLY
+
+    a                           a  +--+
+    ---+Not+--+    out          ---+  Nand+--+
+    b         Nand+---             +--+      |
+    ---+Not+--+                              +--+    out
+                                                Nand+---
+                                             +--+
+                                b  +--+      |
+                                ---+  Nand+--+
+                                   +--+
+*/

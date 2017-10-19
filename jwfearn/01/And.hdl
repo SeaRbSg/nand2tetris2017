@@ -12,3 +12,15 @@ CHIP And {
     Nand(a=a, b=b, out=n);
     Nand(a=n, b=n, out=out);
 }
+
+/*
+    a
+    ---+           out
+    b  Nand+--+Not+---
+    ---+
+
+    a
+    ---+      +--+    out
+    b  Nand+--+  Nand+---
+    ---+      +--+
+*/

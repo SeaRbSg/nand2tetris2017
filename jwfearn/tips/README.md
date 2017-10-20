@@ -11,9 +11,9 @@ CHIP MyMux {
     a, b, sel;
   OUT
     o,   // a if sel == 0, b otherwise
-    no;  // not(out)
+    no;  // !o
   PARTS:
-    Mux(a=a, b=a, sel=sel, out=o);
+    Mux(a=a, b=b, sel=sel, out=o);
     Not(in=o, out=no);
 //      ^^^^ ERROR: Can't connect gate's output pin to part
 }

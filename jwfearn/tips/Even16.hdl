@@ -1,0 +1,25 @@
+CHIP Even16 {
+  IN
+    in[16];
+  OUT
+    out; // 1 if in is even, otherwise 0
+
+    PARTS:
+    /* PROBLEM
+    Not16(in=in, out=temp);
+    And(a=temp[0], b=true, out=out);
+//      ^^^^ ERROR: Can't connect gate's output pin to part
+    */
+
+    /* SOLUTION 1
+    Not16(in=in, out[0]=temp); // make a pin for an output bit
+    And(a=temp, b=true, out=out);
+    */
+
+    /* SOLUTION 2
+    Not16(in=in, out[0]=out); // output a single bit directly
+    */
+
+    /* SOLUTION 3 */
+    Not(in=in[0], out=out);   // input a single bit directly
+}

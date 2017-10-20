@@ -37,21 +37,32 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
+
+    // If selected, apply zero to x and y values
     Mux16(a=x, b=false, sel=zx, out=xz);
     Mux16(a=y, b=false, sel=zy, out=yz);
 
+    // If selected, apply not to x and y values
     Not16(in=xz, out=xzn);
     Not16(in=yz, out=yzn);
-
     Mux16(a=xz, b=xzn, sel=nx, out=xn);
     Mux16(a=yz, b=yzn, sel=ny, out=yn);
 
+    // Apply selected functions, and/add, to x and y values
     And16(a=xn, b=yn, out=f0);
     Add16(a=xn, b=yn, out=f1);
+    Mux16(a=f0, b=f1, sel=f, out=fo);
 
-    Mux16(a=f0, b=f1, sel=f, out=o);
+    // If selected, apply not to output value o, extract sign of o
+    Not16(in=fo, out=fon);
+    Mux16(a=fo, b=fon, sel=no, out=out, out[15]=ng, out[15]=s, out=o);
 
-    Not16(in=o, out=on);
+    // Extract sign of -o
+    Not16(in=out, out=on);
+    Inc16(in=on, out[15]=sn);
 
-    Mux16(a=o, b=on, sel=no, out=out);
+    // If both sign bits are 0, then o must be 0: set zr to 1
+    Not(in=s, out=z);
+    Not(in=sn, out=zn);
+    And(a=z, b=zn, out=zr);
 }

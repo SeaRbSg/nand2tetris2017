@@ -53,16 +53,11 @@ CHIP ALU {
     Add16(a=xn, b=yn, out=f1);
     Mux16(a=f0, b=f1, sel=f, out=fo);
 
-    // If selected, apply not to output value o, extract sign of o
+    // If selected, apply not to output value; test for negative and zero
     Not16(in=fo, out=fon);
-    Mux16(a=fo, b=fon, sel=no, out=out, out[15]=ng, out[15]=s, out=o);
-
-    // Extract sign of -o
-    Not16(in=o, out=on);
-    Inc16(in=on, out[15]=sn);
-
-    // If both sign bits are 0, then o must be 0: set zr to 1
-    Not(in=s, out=z);
-    Not(in=sn, out=zn);
-    And(a=z, b=zn, out=zr);
+    Mux16(a=fo, b=fon, sel=no, out=out, out[0..7]=o0, out[8..15]=o1, out[15]=ng);
+    Or8Way(in=o0, out=nz0);
+    Or8Way(in=o1, out=nz1);
+    Or(a=nz0, b=nz1, out=nzr);
+    Not(in=nzr, out=zr);
 }

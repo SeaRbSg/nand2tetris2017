@@ -1,8 +1,3 @@
-// This file is part of www.nand2tetris.org
-// and the book "The Elements of Computing Systems"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/03/a/Bit.hdl
-
 /**
  * 1-bit register:
  * If load[t] == 1 then out[t+1] = in[t]
@@ -10,9 +5,10 @@
  */
 
 CHIP Bit {
-    IN in, load;
-    OUT out;
+  IN in, load;
+  OUT out;
 
-    PARTS:
-    // Put your code here:
+  PARTS:
+  Mux(a=d0, b=in, sel=load, out=d1);
+  DFF(in=d1, out=d0, out=out);
 }

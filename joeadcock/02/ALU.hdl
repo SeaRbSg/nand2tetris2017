@@ -42,49 +42,11 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-    Not(in=zx, out=zxMask);
-    And16(a[0] = zxMask,
-          a[1] = zxMask,
-          a[2] = zxMask,
-          a[3] = zxMask,
-          a[4] = zxMask,
-          a[5] = zxMask,
-          a[6] = zxMask,
-          a[7] = zxMask,
-          a[8] = zxMask,
-          a[9] = zxMask,
-          a[10] = zxMask,
-          a[11] = zxMask,
-          a[12] = zxMask,
-          a[13] = zxMask,
-          a[14] = zxMask,
-          a[15] = zxMask,
-          b=x,
-          out=zxX);
-    Not16(in=zxX, out=nzxX);
-    Mux16(a=zxX, b=nzxX, sel=nx, out=xIn);
+    Not16(in=x, out=nxX);
+    Mux4Way16(a=x, b=false, c=nxX, d=true, sel[0]=zx, sel[1]=nx, out=xIn);
 
-    Not(in=zy, out=zyMask);
-    And16(a[0] = zyMask,
-          a[1] = zyMask,
-          a[2] = zyMask,
-          a[3] = zyMask,
-          a[4] = zyMask,
-          a[5] = zyMask,
-          a[6] = zyMask,
-          a[7] = zyMask,
-          a[8] = zyMask,
-          a[9] = zyMask,
-          a[10] = zyMask,
-          a[11] = zyMask,
-          a[12] = zyMask,
-          a[13] = zyMask,
-          a[14] = zyMask,
-          a[15] = zyMask,
-          b=y,
-          out=zyY);
-    Not16(in=zyY, out=nzyY);
-    Mux16(a=zyY, b=nzyY, sel=ny, out=yIn);
+    Not16(in=y, out=nyY);
+    Mux4Way16(a=y, b=false, c=nyY, d=true, sel[0]=zy, sel[1]=ny, out=yIn);
 
     Add16(a=xIn, b=yIn, out=add);
     And16(a=xIn, b=yIn, out=and);

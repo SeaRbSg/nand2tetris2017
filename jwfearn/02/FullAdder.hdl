@@ -8,25 +8,16 @@ CHIP FullAdder {
         carry;   // Left bit of a + b + c
 
     PARTS:
-    // HalfAdder
     Nand(a=b, b=c, out=bcn);
-    Nand(a=bcn, b=bcn, out=c0);
     Nand(a=b, b=bcn, out=bn);
     Nand(a=c, b=bcn, out=cn);
     Nand(a=bn, b=cn, out=s);
-
-    // HalfAdder
     Nand(a=a, b=s, out=asn);
-    Nand(a=asn, b=asn, out=c1);
     Nand(a=a, b=asn, out=an);
     Nand(a=s, b=asn, out=sn);
     Nand(a=an, b=sn, out=sum);
-
-    // Or
-    Nand(a=c0, b=c0, out=c0n);
-    Nand(a=c1, b=c1, out=c1n);
-    Nand(a=c0n, b=c1n, out=carry);
-} // 13 Nands TODO: minimum 9 Nands
+    Nand(a=bcn, b=asn, out=carry);
+}
 
 /**
  *     a  b  c  carry sum

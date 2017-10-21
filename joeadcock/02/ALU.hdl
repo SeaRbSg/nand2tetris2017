@@ -1,0 +1,98 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/02/ALU.hdl
+
+/**
+ * The ALU (Arithmetic Logic Unit).
+ * Computes one of the following functions:
+ * x+y, x-y, y-x, 0, 1, -1, x, y, -x, -y, !x, !y,
+ * x+1, y+1, x-1, y-1, x&y, x|y on two 16-bit inputs,
+ * according to 6 input bits denoted zx,nx,zy,ny,f,no.
+ * In addition, the ALU computes two 1-bit outputs:
+ * if the ALU output == 0, zr is set to 1; otherwise zr is set to 0;
+ * if the ALU output < 0, ng is set to 1; otherwise ng is set to 0.
+ */
+
+// Implementation: the ALU logic manipulates the x and y inputs
+// and operates on the resulting values, as follows:
+// if (zx == 1) set x = 0        // 16-bit constant
+// if (nx == 1) set x = !x       // bitwise not
+// if (zy == 1) set y = 0        // 16-bit constant
+// if (ny == 1) set y = !y       // bitwise not
+// if (f == 1)  set out = x + y  // integer 2's complement addition
+// if (f == 0)  set out = x & y  // bitwise and
+// if (no == 1) set out = !out   // bitwise not
+// if (out == 0) set zr = 1
+// if (out < 0) set ng = 1
+
+CHIP ALU {
+    IN
+        x[16], y[16],  // 16-bit inputs
+        zx, // zero the x input?
+        nx, // negate the x input?
+        zy, // zero the y input?
+        ny, // negate the y input?
+        f,  // compute out = x + y (if 1) or x & y (if 0)
+        no; // negate the out output?
+
+    OUT
+        out[16], // 16-bit output
+        zr, // 1 if (out == 0), 0 otherwise
+        ng; // 1 if (out < 0),  0 otherwise
+
+    PARTS:
+    Not(in=zx, out=zxMask);
+    And16(a[0] = zxMask,
+          a[1] = zxMask,
+          a[2] = zxMask,
+          a[3] = zxMask,
+          a[4] = zxMask,
+          a[5] = zxMask,
+          a[6] = zxMask,
+          a[7] = zxMask,
+          a[8] = zxMask,
+          a[9] = zxMask,
+          a[10] = zxMask,
+          a[11] = zxMask,
+          a[12] = zxMask,
+          a[13] = zxMask,
+          a[14] = zxMask,
+          a[15] = zxMask,
+          b=x,
+          out=zxX);
+    Not16(in=zxX, out=nzxX);
+    Mux16(a=zxX, b=nzxX, sel=nx, out=xIn);
+
+    Not(in=zy, out=zyMask);
+    And16(a[0] = zyMask,
+          a[1] = zyMask,
+          a[2] = zyMask,
+          a[3] = zyMask,
+          a[4] = zyMask,
+          a[5] = zyMask,
+          a[6] = zyMask,
+          a[7] = zyMask,
+          a[8] = zyMask,
+          a[9] = zyMask,
+          a[10] = zyMask,
+          a[11] = zyMask,
+          a[12] = zyMask,
+          a[13] = zyMask,
+          a[14] = zyMask,
+          a[15] = zyMask,
+          b=y,
+          out=zyY);
+    Not16(in=zyY, out=nzyY);
+    Mux16(a=zyY, b=nzyY, sel=ny, out=yIn);
+
+    Add16(a=xIn, b=yIn, out=add);
+    And16(a=xIn, b=yIn, out=and);
+    Mux16(a=and, b=add, sel=f, out=value);
+
+    Not16(in=value, out=negValue);
+    Mux16(a=value, b=negValue, sel=no, out=out, out[15]=ng, out=outValue);
+
+    Or16Way(in=outValue, out=notZero);
+    Not(in=notZero, out=zr);
+}

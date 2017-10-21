@@ -58,7 +58,7 @@ CHIP ALU {
     Mux16(a=fo, b=fon, sel=no, out=out, out[15]=ng, out[15]=s, out=o);
 
     // Extract sign of -o
-    Not16(in=out, out=on);
+    Not16(in=o, out=on);
     Inc16(in=on, out[15]=sn);
 
     // If both sign bits are 0, then o must be 0: set zr to 1

@@ -14,5 +14,32 @@ CHIP Mux {
     OUT out;
 
     PARTS:
-    // Put your code here:
+    // 1st - (NOT(a) AND b AND sel)
+    Not(in = a, out = pin-1a);
+    And(a = pin-1a, b = b, out = pin-1ab);
+    And(a = pin-1ab, b = sel, out = mux-1);
+
+    // 2nd - (a AND NOT(b) AND NOT(sel))
+    Not(in = b, out = pin-2b);
+    And(a = a, b = pin-2b, out = pin-2ab);
+    Not(in = sel, out = pin-2sel);
+    And(a = pin-2ab, b = pin-2sel, out = mux-2);
+
+    // 1st OR 2nd
+    Or(a = mux-1, b = mux-2, out = mux-1-2);
+
+    // 3rd - (a AND b AND NOT(sel))
+    And(a = a, b = b, out = pin-3ab);
+    Not(in = sel, out = pin-3sel);
+    And(a = pin-3ab, b = pin-3sel, out = mux-3);
+
+    // (1st OR 2nd) OR 3rd
+    Or(a = mux-1-2, b = mux-3, out = mux-1-2-3);
+
+    // 4th - (a AND b AND sel)
+    And(a = a, b = b, out = pin-4ab);
+    And(a = pin-4ab, b = sel, out = mux-4);
+
+    // (((1st OR 2nd) OR 3rd) OR 4th)
+    Or(a = mux-1-2-3, b = mux-4, out = out);
 }

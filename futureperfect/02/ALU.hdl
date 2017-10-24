@@ -42,5 +42,31 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // Put you code here:
+    //operand transformation pipeline for x and y
+    Mux16(a=x, b=false, sel=zx, out=zeroedX); // zero x?
+    Not16(in=zeroedX, out=NotOfZeroedX);
+    Mux16(a=zeroedX, b=NotOfZeroedX, sel=nx, out=Xoperand); // not x?
+
+    Mux16(a=y, b=false, sel=zy, out=zeroedY); // zero y?
+    Not16(in=zeroedY, out=NotOfZeroedY);
+    Mux16(a=zeroedY, b=NotOfZeroedY, sel=ny, out=Yoperand); // not y?
+
+    // function application and selection
+    And16(a=Xoperand, b=Yoperand, out=AandBout);
+    Add16(a=Xoperand, b=Yoperand, out=AplusBout); 
+    Mux16(a=AandBout, b=AplusBout, sel=f, out=FunctionApplication);
+
+    //output transformation pipeline
+    Not16(in=FunctionApplication, out=NotFunctionApplication);
+    Mux16(a=FunctionApplication, b=NotFunctionApplication, sel=no, out=out,
+      out[0..7]=lowOrderResultBus, out[8..15]=highOrderResultBus, out[15]=isNegative);
+
+    // State signals
+    And(a=isNegative, b=true, out=ng);
+
+    // 16-input NOR of ALU output value to test if output is zero
+    Or8Way(in=lowOrderResultBus, out=lowOrderOR);
+    Or8Way(in=highOrderResultBus, out=highOrderOR);
+    Or(a=lowOrderOR, b=highOrderOR, out=ORofOUT);
+    Not(in=ORofOUT, out=zr);
 }

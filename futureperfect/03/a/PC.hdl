@@ -16,5 +16,18 @@ CHIP PC {
     OUT out[16];
 
     PARTS:
-    // Put your code here:
+    //Incrementer Unit
+    Inc16(in=registerOut, out=incPCOut);
+
+    // cascading logic to implement
+    // If reset(t-1) then out(t)=0
+    // else if load(t-1) then out(t)=in(t-1)
+    // else if inc(t-1) then out(t)=out(t-1)+1
+    // else out(t)=out(t-1)
+
+    Mux16(a=registerOut, b=incPCOut, sel=inc, out=incOut); // Inc PC
+    Mux16(a=incOut, b=in, sel=load, out=loadOut); //Load PC
+    Mux16(a=loadOut, b=false, sel=reset, out=resetOut); //zero PC
+
+    Register(in=resetOut, load=true, out=out, out=registerOut);
 }

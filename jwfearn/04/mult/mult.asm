@@ -1,12 +1,12 @@
 // Multiplies R0 and R1 and stores the result in R2.
 // (R0, R1, R2 refer to RAM[0], RAM[1], and RAM[2], respectively.)
 
-  @0       // i = R0
+  @R0      // i = R0
   D=M
   @i
   M=D
 
-  @2       // R2 = 0
+  @R2      // R2 = 0
   M=0
 
 (LOOP)
@@ -15,9 +15,9 @@
   @END
   D;JEQ
 
-  @1       // R2 += R1
+  @R1      // R2 += R1
   D=M
-  @2
+  @R2
   M=M+D
 
   @i       // i--

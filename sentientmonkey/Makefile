@@ -1,15 +1,7 @@
-files = $(shell find . -name '*.tst')
-targets = $(patsubst %.tst,%,$(files))
+SUBDIRS := $(shell find . -type d -depth 1)
 
-.PHONY: $(targets) all default
+all: $(SUBDIRS)
+$(SUBDIRS):
+	$(MAKE) -C $@
 
-default: all
-
-$(targets):
-		../tools/HardwareSimulator.sh $@.tst
-
-%:
-		../tools/HardwareSimulator.sh $@.tst
-
-
-all: $(targets)
+.PHONY: all $(SUBDIRS)

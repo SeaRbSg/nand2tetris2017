@@ -6,17 +6,38 @@
 // "white" in every pixel;
 // the screen should remain fully clear as long as no key is pressed.
 
-// @color=black (1)
-// goto WHITE
+  @color   // @color = black (1)
+  M=1
+
+  @WHITE   // goto WHITE
+  0;JMP
+
 (SCAN)
   // if key goto BLACK
+
 (WHITE)
-  // if @color=white goto SCAN
-  // @color=white (0)
+  @color   // if @color == white (0) goto SCAN
+  D=M
+  @SCAN
+  D;JEQ
+
+  @color   // @color = white (0)
+  M=0
+
 (FILL)
   // fill with @color
-  // goto SCAN
+
+  @SCAN    // goto SCAN
+  0;JMP
+
 (BLACK)
-  // if @color=black goto SCAN
-  // @color=black (1)
-  // goto FILL
+  @color   // if @color != white (0) goto SCAN
+  D=M
+  @SCAN
+  D;JNE
+
+  @color   // @color = black (1)
+  M=1
+
+  @FILL    // goto FILL
+  0;JMP

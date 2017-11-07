@@ -8,7 +8,6 @@
 
   @pattern // @pattern = black (-1 == 0b1111111111111111 == 16 black pixels)
   M=-1
-
   @WHITE   // goto WHITE
   0;JMP
 
@@ -17,38 +16,41 @@
   D=M
   @BLACK
   D;JNE
+  @WHITE   // else goto WHITE
+  0;JMP
+
+(FILL)
+  @8191    // sizeof(SCREEN) - 1 == (256 * 512 / 16) - 1 == 8191
+  D=A      // @p = SCREEN + sizeof(SCREEN) - 1
+  @SCREEN
+  D=D+A
+  @p
+  M=D
+(LOOP)
+  @pattern // *p = @pattern
+  D=M
+  @p
+  A=M
+  M=D
+  @SCREEN  // goto SCAN if p == SCREEN
+  D=A
+  @p
+  D=M-D
+  @SCAN
+  D;JEQ
+  @p       // p--
+  M=M-1
+  @LOOP    // goto LOOP
+  0;JMP
 
 (WHITE)
   @pattern // if @pattern == white (0) goto SCAN
   D=M
   @SCAN
   D;JEQ
-
   @pattern // @pattern = white (0)
   M=0
-
-(FILL)
-  @8192    // @i = word length of screen (256 * 512 / 16 == 8192 == 8K)
-  D=A
-  @i
-  M=D
-
-(LOOP)
-  @i       // SCREEN[i] = @pattern
-  D=M
-  @SCREEN
-  A=A+D
-  //M=@pattern
-
-  @i       // goto SCAN if i == 0
-  D=M
-  @SCAN
-  D;JEQ
-
-  @i       // i--
-  M=M-1
-
-  @LOOP    // goto LOOP
+  @FILL    // goto FILL
   0;JMP
 
 (BLACK)
@@ -56,9 +58,7 @@
   D=M
   @SCAN
   D;JNE
-
   @pattern // @pattern = black (-1)
   M=-1
-
   @FILL    // goto FILL
   0;JMP

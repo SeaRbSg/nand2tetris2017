@@ -6,59 +6,60 @@
 // "white" in every pixel;
 // the screen should remain fully clear as long as no key is pressed.
 
-  @pattern // @pattern = black (-1 == 0b1111111111111111 == 16 black pixels)
-  M=-1
-  @WHITE   // goto WHITE
-  0;JMP
+@newpattern    // force initial white fill
+D=0
+M=D
+@pattern       // pattern = !newpattern
+M=!D
+@UPDATE        // goto UPDATE
+0;JMP
 
 (SCAN)
-  @KBD     // if KBD != 0 goto BLACK
+  @KBD         // newpattern = black if KBD != 0
   D=M
-  @BLACK
+  @newpattern
+  M=-1         // black (-1 == 16 black pixels)
+  @UPDATE      // goto UPDATE
   D;JNE
-  @WHITE   // else goto WHITE
+  @newpattern  // newpattern = white
+  M=0          // white (0 == 16 white pixels)
+  @UPDATE      // goto UPDATE
   0;JMP
 
 (FILL)
-  @8191    // sizeof(SCREEN) - 1 == (256 * 512 / 16) - 1 == 8191
-  D=A      // @p = SCREEN + sizeof(SCREEN) - 1
+  @8191        // sizeof(SCREEN) - 1 == (256 * 512 / 16) - 1 == 8191
+  D=A          // p = SCREEN + sizeof(SCREEN) - 1
   @SCREEN
   D=D+A
   @p
   M=D
 (LOOP)
-  @pattern // *p = @pattern
+  @pattern     // *p = pattern
   D=M
   @p
   A=M
   M=D
-  @SCREEN  // goto SCAN if p == SCREEN
+  @SCREEN      // goto SCAN if p == SCREEN
   D=A
   @p
   D=M-D
   @SCAN
   D;JEQ
-  @p       // p--
+  @p           // p--
   M=M-1
-  @LOOP    // goto LOOP
+  @LOOP        // goto LOOP
   0;JMP
 
-(WHITE)
-  @pattern // if @pattern == white (0) goto SCAN
+(UPDATE)
+  @pattern     // goto SCAN if newpattern == pattern
   D=M
+  @newpattern
+  D=M-D
   @SCAN
   D;JEQ
-  @pattern // @pattern = white (0)
-  M=0
-  @FILL    // goto FILL
-  0;JMP
-
-(BLACK)
-  @pattern // if @pattern != white (0) goto SCAN
+  @newpattern
   D=M
-  @SCAN
-  D;JNE
-  @pattern // @pattern = black (-1)
-  M=-1
-  @FILL    // goto FILL
+  @pattern     // pattern = newpattern
+  M=D
+  @FILL        // goto FILL
   0;JMP

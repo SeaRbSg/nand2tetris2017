@@ -27,10 +27,8 @@ M=!D
   0;JMP
 
 (FILL)
-  @8191        // sizeof(SCREEN) - 1 == (256 * 512 / 16) - 1 == 8191
-  D=A          // p = SCREEN + sizeof(SCREEN) - 1
-  @SCREEN
-  D=D+A
+  @SCREEN      // p = SCREEN
+  D=A
   @p
   M=D
 (LOOP)
@@ -39,14 +37,14 @@ M=!D
   @p
   A=M
   M=D
-  @SCREEN      // goto SCAN if p == SCREEN
-  D=A
+  @24575       // 24575 = SCREEN + sizeof(SCREEN) - 1 == 16384 + 8192 - 1
+  D=A          // goto SCAN if p == 24575
   @p
   D=M-D
   @SCAN
   D;JEQ
-  @p           // p--
-  M=M-1
+  @p           // p++
+  M=M+1
   @LOOP        // goto LOOP
   0;JMP
 

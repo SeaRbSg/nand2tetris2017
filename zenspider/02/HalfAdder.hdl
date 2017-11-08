@@ -17,13 +17,11 @@ CHIP HalfAdder {
     // Xor(a=a, b=b, out=sum);
     // And(a=a, b=b, out=carry);
 
-    // expands and reduces (via not-sharing) to:
+    // reduces and optimizes to:
 
-    Nor(a=a,  b=a,  out=w1);    // depth = 1
-    Nor(a=b,  b=b,  out=w2);
-    Nor(a=a,  b=b,  out=w3);
-    Nor(a=w1, b=w2, out=w4);    // depth = 2
-    Nor(a=w3, b=w4, out=sum);   // depth = 3
-
-    Nor(a=w1, b=w2, out=carry); // And, sharing not-a and not-b
+    Nand(a=a, b=b, out=w1);      // xor
+    Nand(a=a, b=w1, out=w2);
+    Nand(a=w1, b=b, out=w3);
+    Nand(a=w2, b=w3, out=sum);
+    Nand(a=w1, b=w1, out=carry); // and, reusing part of xor
 }

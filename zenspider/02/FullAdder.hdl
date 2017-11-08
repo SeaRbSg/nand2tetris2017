@@ -37,17 +37,16 @@ CHIP FullAdder {
     // Nand(a=w8, b=w9, out=carry); // or
 
     // which further reduces to (9 gates):
-    // it happens to be exactly the same using nand or nor:
 
-    Nor(a=a, b=b, out=w1);     // first xor
-    Nor(a=a, b=w1, out=w2);
-    Nor(a=w1, b=b, out=w3);
-    Nor(a=w2, b=w3, out=w4);
-    
-    Nor(a=w4, b=c, out=w5);     // second xor
-    Nor(a=w4, b=w5, out=w6);
-    Nor(a=w5, b=c, out=w7);
-    Nor(a=w6, b=w7, out=sum);
-    
-    Nor(a=w5, b=w1, out=carry); // OR of second and first AND
+    Nand(a=a, b=b, out=w1);     // first xor
+    Nand(a=a, b=w1, out=w2);
+    Nand(a=w1, b=b, out=w3);
+    Nand(a=w2, b=w3, out=w4);
+
+    Nand(a=w4, b=c, out=w5);     // second xor
+    Nand(a=w4, b=w5, out=w6);
+    Nand(a=w5, b=c, out=w7);
+    Nand(a=w6, b=w7, out=sum);
+
+    Nand(a=w5, b=w1, out=carry); // OR of second and first AND
 }

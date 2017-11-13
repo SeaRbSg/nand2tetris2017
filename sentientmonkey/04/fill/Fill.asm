@@ -20,18 +20,25 @@
     @max
     M=D         // i=maximum
     @draw       // draw=0
+    M=0
+(READ)
+    @KBD
+    D=M
+    @DRAW       // GOTO DRAW if kbd eq 0
+    D;JEQ
+    @draw       // set draw=-1
     M=-1
-(NEXT)
-    @draw
+(DRAW)
+    @draw       // D=draw
     D=M
     @position
     A=M         // move to position
-    M=D         // set position to black
+    M=D         // set position value to draw
     @position
     MD=M+1      // Advance position
     @max
     D=M-D       // D=max-D
-    @BEGIN
+    @BEGIN      // GOTO BEGIN if max-position eq 0
     D;JEQ
-    @NEXT
+    @READ       // GOTO READ
     0;JMP

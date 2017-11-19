@@ -1,0 +1,153 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/05/CPU.hdl
+
+/**
+ * The Hack CPU (Central Processing unit), consisting of an ALU,
+ * two registers named A and D, and a program counter named PC.
+ * The CPU is designed to fetch and execute instructions written in
+ * the Hack machine language. In particular, functions as follows:
+ * Executes the inputted instruction according to the Hack machine
+ * language specification. The D and A in the language specification
+ * refer to CPU-resident registers, while M refers to the external
+ * memory location addressed by A, i.e. to Memory[A]. The inM input
+ * holds the value of this location. If the current instruction needs
+ * to write a value to M, the value is placed in outM, the address
+ * of the target location is placed in the addressM output, and the
+ * writeM control bit is asserted. (When writeM==0, any value may
+ * appear in outM). The outM and writeM outputs are combinational:
+ * they are affected instantaneously by the execution of the current
+ * instruction. The addressM and pc outputs are clocked: although they
+ * are affected by the execution of the current instruction, they commit
+ * to their new values only in the next time step. If reset==1 then the
+ * CPU jumps to address 0 (i.e. pc is set to 0 in next time step) rather
+ * than to the address resulting from executing the current instruction.
+ */
+
+CHIP CPU {
+
+    IN  inM[16],         // M value input  (M = contents of RAM[A])
+        instruction[16], // Instruction for execution
+        reset;           // Signals whether to re-start the current
+                         // program (reset==1) or continue executing
+                         // the current program (reset==0).
+
+    OUT outM[16],        // M value output
+        writeM,          // Write to M?
+        addressM[15],    // Address in data memory (of M)
+        pc[15];          // address of next instruction
+
+    PARTS:
+    Mux(a = false,
+        b = instruction[12], //a
+        sel = instruction[15],
+        out = a);
+    Mux(a = true,
+        b = instruction[11], //c1
+        sel = instruction[15],
+        out  = zx);
+    Mux(a = true,
+        b = instruction[10], //c2
+        sel = instruction[15],
+        out = nx);
+    Mux(a = false,
+        b = instruction[9], //c3
+        sel = instruction[15],
+        out = zy);
+    Mux(a = false,
+        b = instruction[8], //c4
+        sel = instruction[15],
+        out = ny);
+    Mux(a = false,
+        b = instruction[7], //c5
+        sel = instruction[15],
+        out = f);
+    Mux(a = false,
+        b = instruction[6], //c6
+        sel = instruction[15],
+        out = no);
+    Mux(a = true,
+        b = instruction[5], //d1
+        sel = instruction[15],
+        out = d1);
+    Mux(a = false,
+        b = instruction[4], //d2
+        sel = instruction[15],
+        out = d2);
+    Mux(a = false,
+        b = instruction[3], //d3
+        sel = instruction[15],
+        out = d3,
+        out = writeM);
+    Mux(a = false,
+        b = instruction[2], //j1
+        sel = instruction[15],
+        out = j1);
+    Mux(a = false,
+        b = instruction[1], //j2
+        sel = instruction[15],
+        out = j2);
+    Mux(a = false,
+        b = instruction[0], //j3
+        sel = instruction[15],
+        out = j3);
+
+    Mux16(a = instruction, b = aluOut, sel = instruction[15], out = aIn);
+    ARegister(in = aIn,
+              load = d1,
+              out = aValue,
+              out[0..14]=addressM);
+
+    Mux16(a = aValue,
+          b = inM,
+          sel = a,
+          out = amValue);
+
+    DRegister(in = aluOut,
+              load = d2,
+              out = dValue);
+
+    ALU(x = dValue,
+        y = amValue,
+        zx = zx,
+        nx = nx,
+        zy = zy,
+        ny = ny,
+        f = f,
+        no = no,
+        out = outM,
+        out = aluOut,
+        zr = zr,
+        ng = ng);
+
+    Not(in = zr, out = notZero);
+    Not(in = ng, out = notNegative);
+    And(a = notZero, b = notNegative, out = jgt);
+    And(a = true, b = zr, out = jeq);
+    And(a = true, b = notNegative, out = jge);
+    And(a = true, b = ng, out = jlt);
+    And(a = true, b = notZero, out = jne);
+    Or(a = ng, b = zr, out = jle);
+
+    //using mux8way16 as mux8way
+    Mux8Way16(
+      a[0] = false,
+      b[0] = jgt,
+      c[0] = jeq,
+      d[0] = jge,
+      e[0] = jlt,
+      f[0] = jne,
+      g[0] = jle,
+      h[0] = true,
+      sel[0] = j3,
+      sel[1] = j2,
+      sel[2] = j1,
+      out[0]=jump);
+
+    PC(in = amValue,
+       load = jump,
+       inc = true,
+       reset = reset,
+       out[0..14] = pc[0..14]);
+}

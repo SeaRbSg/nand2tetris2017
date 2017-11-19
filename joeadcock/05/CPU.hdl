@@ -41,7 +41,7 @@ CHIP CPU {
     PARTS:
     // Decode c-instruction
     And(a = instruction[15], b = instruction[12], out = a); //a
-    And(a = instruction[15], b = instruction[11], out  = zx); //c1
+    And(a = instruction[15], b = instruction[11], out = zx); //c1
     And(a = instruction[15], b = instruction[10], out = nx); //c2
     And(a = instruction[15], b = instruction[9], out = zy); //c3
     And(a = instruction[15], b = instruction[8], out = ny); //c4
@@ -56,11 +56,11 @@ CHIP CPU {
 
     Not(in = instruction[15], out = aInstruction);
     Mux16(a = aluOut, b = instruction, sel = aInstruction, out = aIn);
-    Or(a = aInstruction, b = d1, out=loadA);
+    Or(a = aInstruction, b = d1, out = loadA);
     ARegister(in = aIn,
               load = loadA,
               out = aValue,
-              out[0..14]=addressM);
+              out[0..14] = addressM);
 
     Mux16(a = aValue,
           b = inM,
@@ -106,7 +106,7 @@ CHIP CPU {
       sel[0] = j3,
       sel[1] = j2,
       sel[2] = j1,
-      out[0]=jump);
+      out[0] = jump);
 
     PC(in = amValue,
        load = jump,

@@ -39,59 +39,21 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-    Mux(a = false,
-        b = instruction[12], //a
-        sel = instruction[15],
-        out = a);
-    Mux(a = true,
-        b = instruction[11], //c1
-        sel = instruction[15],
-        out  = zx);
-    Mux(a = true,
-        b = instruction[10], //c2
-        sel = instruction[15],
-        out = nx);
-    Mux(a = false,
-        b = instruction[9], //c3
-        sel = instruction[15],
-        out = zy);
-    Mux(a = false,
-        b = instruction[8], //c4
-        sel = instruction[15],
-        out = ny);
-    Mux(a = false,
-        b = instruction[7], //c5
-        sel = instruction[15],
-        out = f);
-    Mux(a = false,
-        b = instruction[6], //c6
-        sel = instruction[15],
-        out = no);
-    Mux(a = true,
-        b = instruction[5], //d1
-        sel = instruction[15],
-        out = d1);
-    Mux(a = false,
-        b = instruction[4], //d2
-        sel = instruction[15],
-        out = d2);
-    Mux(a = false,
-        b = instruction[3], //d3
-        sel = instruction[15],
-        out = d3,
-        out = writeM);
-    Mux(a = false,
-        b = instruction[2], //j1
-        sel = instruction[15],
-        out = j1);
-    Mux(a = false,
-        b = instruction[1], //j2
-        sel = instruction[15],
-        out = j2);
-    Mux(a = false,
-        b = instruction[0], //j3
-        sel = instruction[15],
-        out = j3);
+    Nand(a = true, b = instruction[15], out = aInstruction);
+
+    And(a = instruction[15], b = instruction[12], out = a); //a
+    And(a = instruction[15], b = instruction[11], out  = zx); //c1
+    And(a = instruction[15], b = instruction[10], out = nx); //c2
+    And(a = instruction[15], b = instruction[9], out = zy); //c3
+    And(a = instruction[15], b = instruction[8], out = ny); //c4
+    And(a = instruction[15], b = instruction[7], out = f); //c5
+    And(a = instruction[15], b = instruction[6], out = no); //c6
+    Or(a = aInstruction, b = instruction[5], out = d1); //d1
+    And(a = instruction[15], b = instruction[4], out = d2); //d2
+    And(a = instruction[15], b = instruction[3], out = d3, out = writeM); //d3
+    And(a = instruction[15], b = instruction[2], out = j1); //j1
+    And(a = instruction[15], b = instruction[1], out = j2); //j2
+    And(a = instruction[15], b = instruction[0], out = j3); //j3
 
     Mux16(a = instruction, b = aluOut, sel = instruction[15], out = aIn);
     ARegister(in = aIn,

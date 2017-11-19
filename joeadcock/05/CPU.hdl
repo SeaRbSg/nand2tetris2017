@@ -39,8 +39,7 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-    Nand(a = true, b = instruction[15], out = aInstruction);
-
+    // Decode c-instruction
     And(a = instruction[15], b = instruction[12], out = a); //a
     And(a = instruction[15], b = instruction[11], out  = zx); //c1
     And(a = instruction[15], b = instruction[10], out = nx); //c2
@@ -48,16 +47,18 @@ CHIP CPU {
     And(a = instruction[15], b = instruction[8], out = ny); //c4
     And(a = instruction[15], b = instruction[7], out = f); //c5
     And(a = instruction[15], b = instruction[6], out = no); //c6
-    Or(a = aInstruction, b = instruction[5], out = d1); //d1
+    And(a = instruction[15], b = instruction[5], out = d1); //d1
     And(a = instruction[15], b = instruction[4], out = d2); //d2
     And(a = instruction[15], b = instruction[3], out = d3, out = writeM); //d3
     And(a = instruction[15], b = instruction[2], out = j1); //j1
     And(a = instruction[15], b = instruction[1], out = j2); //j2
     And(a = instruction[15], b = instruction[0], out = j3); //j3
 
-    Mux16(a = instruction, b = aluOut, sel = instruction[15], out = aIn);
+    Not(in = instruction[15], out = aInstruction);
+    Mux16(a = aluOut, b = instruction, sel = aInstruction, out = aIn);
+    Or(a = aInstruction, b = d1, out=loadA);
     ARegister(in = aIn,
-              load = d1,
+              load = loadA,
               out = aValue,
               out[0..14]=addressM);
 
